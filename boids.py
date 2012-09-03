@@ -258,7 +258,7 @@ class Boids(list):
                separation=10, 
                alignment=5, 
                goal=20,
-               limit=2):
+               limit=1):
         
         """ Calculates the next motion frame for the flock.
         """
@@ -348,14 +348,15 @@ def dot(x, y):
     rect(x * GRID_SCALE, y * GRID_SCALE, GRID_SCALE, GRID_SCALE)
 
 def draw():
-    for i in range(10):
-        f.update()    
+    for i in range(100):
+        f.update()
+        f.noperch()    
         for b in f.boids:
             mark_grid(b.x, b.y)
 
     for y in range(GRID_SIZE):
         for x in range(GRID_SIZE):
             intensity = GRID.get((x, y), 0)
-            fill(intensity/10.0)
+            fill(1.0 - intensity/50.0)
             dot(x, y)
 
