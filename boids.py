@@ -255,11 +255,11 @@ class Boids(list):
             
     def update(self, 
                shuffled=True, 
-               cohesion=100, 
-               separation=10, 
-               alignment=5, 
-               goal=20,
-               limit=1):
+               cohesion=50, 
+               separation=0, 
+               alignment=1, 
+               goal=10,
+               limit=0.1):
         
         """ Calculates the next motion frame for the flock.
         """
@@ -331,7 +331,7 @@ def flock(n, x, y, w, h):
     
 GRID = {}
 GRID_SIZE = 500
-GRID_SCALE = 5
+GRID_SCALE = 2
 size(GRID_SIZE * GRID_SCALE, GRID_SIZE * GRID_SCALE)
 
 def mark_grid(x, y):
@@ -342,7 +342,7 @@ def mark_grid(x, y):
     GRID[(ix,iy)] = intensity
 
     
-f = flock(5, 0, 0, GRID_SIZE, GRID_SIZE)
+f = flock(10, 0, 0, GRID_SIZE, GRID_SIZE)
 
 speed(100)
 
@@ -351,13 +351,13 @@ def dot(x, y):
 
 def draw():
     nofill()
-    stroke(0, 0.5)
-    strokewidth(0.5)
+    stroke(0)
+    strokewidth(0.1)
     autoclosepath(False)
 
-    for i in range(10):
+    for i in range(100):
         f.update()
-        #f.noperch()    
+        f.noperch()    
         for b in f.boids:
             b.history.append((b.x, b.y))
             #mark_grid(b.x, b.y)
