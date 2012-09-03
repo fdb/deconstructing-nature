@@ -22,6 +22,7 @@ class Boid:
         self.vx = 0
         self.vy = 0
         self.vz = 0
+        self.history = []
         
         self.is_perching = False
         self._perch_t = 0
@@ -329,8 +330,9 @@ def flock(n, x, y, w, h):
     return Boids(n, x, y, w, h)
     
 GRID = {}
-GRID_SIZE = 100
+GRID_SIZE = 500
 GRID_SCALE = 5
+size(GRID_SIZE * GRID_SCALE, GRID_SIZE * GRID_SCALE)
 
 def mark_grid(x, y):
     ix = int(round(x))
@@ -340,7 +342,7 @@ def mark_grid(x, y):
     GRID[(ix,iy)] = intensity
 
     
-f = flock(10, 0, 0, GRID_SIZE, GRID_SIZE)
+f = flock(5, 0, 0, GRID_SIZE, GRID_SIZE)
 
 speed(100)
 
@@ -348,15 +350,28 @@ def dot(x, y):
     rect(x * GRID_SCALE, y * GRID_SCALE, GRID_SCALE, GRID_SCALE)
 
 def draw():
-    for i in range(100):
-        f.update()
-        f.noperch()    
-        for b in f.boids:
-            mark_grid(b.x, b.y)
+    nofill()
+    stroke(0, 0.5)
+    strokewidth(0.5)
+    autoclosepath(False)
 
-    for y in range(GRID_SIZE):
-        for x in range(GRID_SIZE):
-            intensity = GRID.get((x, y), 0)
-            fill(1.0 - intensity/50.0)
-            dot(x, y)
+    for i in range(10):
+        f.update()
+        #f.noperch()    
+        for b in f.boids:
+            b.history.append((b.x, b.y))
+            #mark_grid(b.x, b.y)
+            
+    for b in f.boids:
+        x, y = b.history[0]
+        beginpath(x * GRID_SCALE, y * GRID_SCALE)
+        for x,y in b.history[1:]:
+            lineto(x * GRID_SCALE, y * GRID_SCALE)
+        endpath()
+
+    #for y in range(GRID_SIZE):
+    #    for x in range(GRID_SIZE):
+    ##        intensity = GRID.get((x, y), 0)
+    #        fill(1.0 - intensity/50.0)
+    #        dot(x, y)
 
