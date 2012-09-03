@@ -5,14 +5,15 @@
 from math import sin, cos, radians
 
 GRID_SIZE = 100
-GRID_SCALE = 10
+GRID_SCALE = 2
 
 size(GRID_SIZE * GRID_SCALE, GRID_SIZE * GRID_SCALE)
 
 # (x,y): intensity
 GRID = {}
 
-WORM_ANGLES = 1
+WORM_ANGLES = 45
+
 
 def clamp(x, lower, upper):
     return min(max(x, lower), upper)
@@ -41,8 +42,16 @@ class Worm:
         self.angle += self.angled
         self.timer -= 1
         if self.timer <= 0:
-            self.angled = random(-2.0, 2.0)
+            self.angled = random(-5.0, 5.0)
             self.timer = random(100)
+            
+    def optimal_direction(self):
+        # Find the optimal direction based on where the most intensity in the grid is.
+        ix = int(round(x))
+        iy = int(round(y))
+        
+        GRID.get((ix-1, iy-1))
+        
                 
     def turn_right(self):
         self.angle = (self.angle + WORM_ANGLES) % 360
@@ -53,7 +62,7 @@ class Worm:
         
     
     
-worms = [Worm() for i in range(10)]
+worms = [Worm() for i in range(1)]
 
 def dot(x, y):
     rect(x * GRID_SCALE, y * GRID_SCALE, GRID_SCALE, GRID_SCALE)
@@ -74,12 +83,10 @@ def draw():
             w.random_walk()
             mark_grid(GRID, w.x, w.y)
         
-    max_intensity = 100 # max(GRID.values())
-    #print GRID
+    max_intensity = 100
     for y in range(GRID_SIZE):
         for x in range(GRID_SIZE):
             intensity = GRID.get((x, y), 0)
-            fill((max_intensity - intensity)/float(max_intensity))
+            fill(intensity/10.0)
             dot(x, y)
     
-    #print GRID
