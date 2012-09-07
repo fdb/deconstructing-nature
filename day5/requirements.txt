@@ -1,4 +1,6 @@
 BeautifulSoup==3.2.1
+PIL==1.1.7
+pymongo==2.3
 requests==0.14.0
 simplejson==2.6.1
 wsgiref==0.1.2
