@@ -1,3 +1,7 @@
 *.pyc
 .DS_Store
 _results
+day5/include
+day5/lib
+day5/.Python
+day5/bin
