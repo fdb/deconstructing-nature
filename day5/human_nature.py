@@ -1,4 +1,5 @@
 import re
+import os
 from time import sleep
 from random import randint
 from StringIO import StringIO
@@ -66,22 +67,26 @@ def save_images(board_name, thread_id):
     for post in thread['posts']:
         image_url = 'http://images.4chan.org/%s/src/%s%s' % (board_name, post['tim'], post['ext'])
         print image_url
-        r = requests.get(image_url)
-        img = Image.open(StringIO(r.content))
-        img.save('%s%s' % (post['tim'], post['ext']))
+        try:
+            r = requests.get(image_url)
+            img = Image.open(StringIO(r.content))
+            img.save('images/%s%s' % (post['tim'], post['ext']))
+        except:
+            print "Post 404: %s" % post['tim']
+            continue
         sleep(2)
 
 if __name__=='__main__':
-    board_name = 'b'
+    try:
+        os.mkdir('images')
+    except OSError:
+        pass
+    board_name = 'mlp'
     while True:
         thread_ids = latest_thread_ids(board_name, randint(0, 10))
         for thread_id in thread_ids:
             try:
                 save_images(board_name, thread_id)
             except:
-                print "Images fail %s" % thread_id
+                print "Thread 404 %s" % thread_id
             sleep(5)
-    #from pprint import pprint
-    #board = 'r'
-    #thread_ids = latest_thread_ids(board)
-    #pprint(fetch_thread(board, thread_ids[0]))

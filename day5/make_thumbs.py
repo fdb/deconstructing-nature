@@ -1,10 +1,8 @@
-
-from os.path import splitext
+import os
+from os.path import splitext, join, basename
 from glob import glob
 
 from PIL import Image
-
-
 
 def create_resized(fname, target_fname, maxwidth=None, maxheight=None):
     """Resize an image up to the maximum width and height.
@@ -100,9 +98,13 @@ def check_size(fname, minwidth=None, minheight=None, maxwidth=None, maxheight=No
     if maxheight is not None and img_height > maxheight:
         return False
     return True
-    
-    
-fnames = glob('*.png')
+        
+try:
+    os.mkdir('thumbs')
+except OSError:
+    pass
+fnames = glob('images/*')
 for fname in fnames:
-    name, ext = splitext(fname)
-    create_cropped(fname, 'thumbs/%s%s' % (name, ext), 500, 500)
+    target_fname = join('thumbs', basename(fname))
+    print target_fname
+    create_cropped(fname, target_fname, 500, 500)
